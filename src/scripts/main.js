@@ -1,6 +1,6 @@
 
 (()=>{const canvas=document.getElementById('scene'),ctx=canvas.getContext('2d'),preview=document.getElementById('preview'),art=document.getElementById('art'),pname=document.getElementById('pname'),overlay=document.getElementById('overlay');let W,H,dpr,logoMask,logoClearanceMask,items=[],hover=null,drag=null,mouse={x:-999,y:-999},gravity=true,frame=0;const projects=[{name:'About Metro',color:'#f1eee9',ink:'#111',label:'METRO',type:'about'},{name:'Hawari',color:'#b55c3b',ink:'#fff',label:'حواري'},{name:'Maqabid',color:'#d8d4c7',ink:'#111',label:'مقابض'},{name:'Whynot',color:'#8fbbcf',ink:'#111',label:'WHY NOT'},{name:'Selected Work',color:'#e5d8a9',ink:'#111',label:'WORK'}];
-const logoImg=new Image();logoImg.src='public/logo/metro-logo.svg';
+const logoImg=new Image();logoImg.src='public/logo/metro-logo.svg?v=pdf-vector-20261023';
 function logoRect(){const scale=Math.min(W/1920*.91,H/680*.69);return {x:(W-1920*scale)/2,y:H*.68-340*scale,w:1920*scale,h:680*scale}}
 function drawLogo(c){if(!logoImg.complete)return;const r=logoRect();c.drawImage(logoImg,r.x,r.y,r.w,r.h)}
 function size(){const rect=canvas.getBoundingClientRect();W=rect.width;H=rect.height;dpr=Math.min(devicePixelRatio||1,2);canvas.width=W*dpr;canvas.height=H*dpr;ctx.setTransform(dpr,0,0,dpr,0,0);buildMask();reset()}
