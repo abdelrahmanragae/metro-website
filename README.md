@@ -1,18 +1,20 @@
 # Metro Website
 
-Studio Metro's website project. The approved V12 capsule physics prototype has been organized into separate HTML, CSS, JavaScript and SVG assets in the prepared project bundle.
+Studio Metro homepage, migrated from the approved V12 physics prototype.
+
+## Run locally
+
+Open `index.html` or run `python3 -m http.server 8000` in this folder and open http://localhost:8000. A local server is recommended for consistent asset loading.
 
 ## Structure
 
-- `index.html` — homepage
-- `src/styles/main.css` — styles
-- `src/scripts/main.js` — V12 capsule physics and interactions
-- `public/logo/metro-logo.svg` — original Metro logo
+- `index.html` — page markup
+- `src/styles/main.css` — layout and typography
+- `src/scripts/main.js` — V12 capsule physics, hover and interactions
+- `public/logo/metro-logo.svg` — original logo
+- `public/fonts/` — add licensed Aeonik Pro font files locally (not included in the shared ZIP)
 - `public/projects/` — future project imagery
-- `public/fonts/` — add licensed Aeonik Pro font files locally
 
-## Setup
+## Next
 
-Upload the prepared project bundle's contents to this repository, retaining the directory structure. For local preview run `python3 -m http.server 8000` from the project directory, then visit `http://localhost:8000`.
-
-The current prototype still uses placeholder project previews and placeholder contact actions. Real project imagery and URLs will be added later.
+Replace placeholder portfolio previews with approved project images, add case studies, and set real contact links.
