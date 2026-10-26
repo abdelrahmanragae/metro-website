@@ -6,6 +6,7 @@
 </style></head><body>
 <div id="login" class="login"><div class="panel"><div class="brand" style="padding:0;color:#191919">metro<small>STUDIO ADMIN</small></div><h1 style="margin-top:35px">Welcome back.</h1><p class="muted" style="margin-bottom:22px">Sign in with your studio account.</p><form id="loginForm"><div class="field"><label>Email</label><input id="email" type="email" autocomplete="username" required></div><div class="field"><label>Password</label><input id="password" type="password" autocomplete="current-password" required></div><button class="btn primary" type="submit">Sign in</button><p id="loginError" class="error"></p></form><p class="muted" style="margin-top:22px">Authentication is unavailable until Supabase is configured.</p></div></div>
 <div id="app" class="hidden"><aside><div class="brand">metro<small>STUDIO ADMIN</small></div><div class="nav" id="nav"></div><div class="asidefoot"><span id="userEmail"></span><br><button id="signOut">Sign out</button></div></aside><main><div id="view"></div></main></div>
+<script src="config.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <script>
 'use strict';
@@ -60,5 +61,4 @@ $('#signOut').onclick=async()=>{await sb.auth.signOut();location.reload()};
 async function boot(){if(!sb)return;const {data:{session}}=await sb.auth.getSession();$('#login').classList.toggle('hidden',!!session);$('#app').classList.toggle('hidden',!session);if(session){$('#userEmail').textContent=session.user.email;show('Overview')}}
 if(sb){sb.auth.onAuthStateChange(()=>setTimeout(boot,0));boot()}
 </script>
-<script src="config.js"></script>
 </body></html>
