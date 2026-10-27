@@ -46,20 +46,32 @@ alter table public.contact_links enable row level security;
 alter table public.messages enable row level security;
 -- Initial phase: invited authenticated team members share editorial permissions.
 -- Never enable public UPDATE/DELETE, and never expose service_role keys in browser.
+drop policy if exists "public published projects" on public.projects;
 create policy "public published projects" on public.projects for select to anon using (published);
+drop policy if exists "public visible team" on public.team_members;
 create policy "public visible team" on public.team_members for select to anon using (visible);
+drop policy if exists "public pages" on public.pages;
 create policy "public pages" on public.pages for select to anon using (true);
+drop policy if exists "public visible contacts" on public.contact_links;
 create policy "public visible contacts" on public.contact_links for select to anon using (visible);
+drop policy if exists "authenticated projects" on public.projects;
 create policy "authenticated projects" on public.projects for all to authenticated using (true) with check (true);
+drop policy if exists "authenticated team" on public.team_members;
 create policy "authenticated team" on public.team_members for all to authenticated using (true) with check (true);
+drop policy if exists "authenticated pages" on public.pages;
 create policy "authenticated pages" on public.pages for all to authenticated using (true) with check (true);
+drop policy if exists "authenticated contacts" on public.contact_links;
 create policy "authenticated contacts" on public.contact_links for all to authenticated using (true) with check (true);
+drop policy if exists "authenticated inbox" on public.messages;
 create policy "authenticated inbox" on public.messages for all to authenticated using (true) with check (true);
 -- Public form submission should use a server-side endpoint with rate limits and spam protection.
 -- No anon INSERT policy is intentionally defined for messages yet.
 insert into storage.buckets(id,name,public,file_size_limit,allowed_mime_types)
  values ('media','media',true,52428800,array['image/jpeg','image/png','image/webp','image/gif','video/mp4','video/webm'])
  on conflict(id) do nothing;
+drop policy if exists "studio uploads" on storage.objects;
 create policy "studio uploads" on storage.objects for insert to authenticated with check (bucket_id='media');
+drop policy if exists "studio updates media" on storage.objects;
 create policy "studio updates media" on storage.objects for update to authenticated using (bucket_id='media') with check (bucket_id='media');
+drop policy if exists "studio deletes media" on storage.objects;
 create policy "studio deletes media" on storage.objects for delete to authenticated using (bucket_id='media');
