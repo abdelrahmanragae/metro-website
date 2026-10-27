@@ -1,5 +1,60 @@
 
-(()=>{const canvas=document.getElementById('scene'),ctx=canvas.getContext('2d'),preview=document.getElementById('preview'),art=document.getElementById('art'),pname=document.getElementById('pname'),overlay=document.getElementById('overlay');let W,H,dpr,logoMask,logoClearanceMask,items=[],hover=null,drag=null,mouse={x:-999,y:-999},gravity=true,frame=0;const projects=[{name:'About Metro',color:'#f1eee9',ink:'#111',label:'METRO',type:'about'},{name:'Hawari',color:'#b55c3b',ink:'#fff',label:'حواري'},{name:'Maqabid',color:'#d8d4c7',ink:'#111',label:'مقابض'},{name:'Whynot',color:'#8fbbcf',ink:'#111',label:'WHY NOT'},{name:'Selected Work',color:'#e5d8a9',ink:'#111',label:'WORK'},{name:'Start a Journey',color:'#e8e5e0',ink:'#111',label:'LET’S TALK',type:'contact'}];
+(()=>{const canvas=document.getElementById('scene'),ctx=canvas.getContext('2d'),preview=document.getElementById('preview'),art=document.getElementById('art'),pname=document.getElementById('pname'),overlay=document.getElementById('overlay');let W,H,dpr,logoMask,logoClearanceMask,items=[],hover=null,drag=null,mouse={x:-999,y:-999},gravity=true,frame=0;let projects=[{name:'About Metro',color:'#f1eee9',ink:'#111',label:'METRO',type:'about'},{name:'Hawari',color:'#b55c3b',ink:'#fff',label:'حواري'},{name:'Maqabid',color:'#d8d4c7',ink:'#111',label:'مقابض'},{name:'Whynot',color:'#8fbbcf',ink:'#111',label:'WHY NOT'},{name:'Selected Work',color:'#e5d8a9',ink:'#111',label:'WORK'},{name:'Start a Journey',color:'#e8e5e0',ink:'#111',label:'LET’S TALK',type:'contact'}];
+// Load published work from Supabase. Static capsules remain as fallback only on network errors.
+const metroConfig=window.METRO_CONFIG||{};
+const staticNav=()=>projects.filter(p=>p.type==='about'||p.type==='contact'||p.type==='work');
+let publishedWork=[];
+async function loadPublishedWork(){
+ if(!metroConfig.url||!metroConfig.anonKey)return;
+ try{
+  const res=await fetch(metroConfig.url+'/rest/v1/projects?select=id,name,slug,description,cover_url,cover_type,blocks,published,on_homepage&published=eq.true&order=created_at.desc',{
+   headers:{apikey:metroConfig.anonKey}
+  });
+  if(!res.ok)throw new Error('Projects request failed: '+res.status);
+  publishedWork=await res.json();
+  const nav=staticNav();
+  const work=publishedWork.filter(p=>p.on_homepage).map(p=>({
+   name:p.name,slug:p.slug,description:p.description,cover_url:p.cover_url,
+   cover_type:p.cover_type,blocks:p.blocks,color:'#d9f1fd',ink:'#111',
+   label:p.name,type:'project',id:p.id
+  }));
+  const about=nav.find(p=>p.type==='about'),contact=nav.find(p=>p.type==='contact');
+  const allWork={name:'All Work',color:'#e5d8a9',ink:'#111',label:'WORK',type:'work'};
+  projects=[...(about?[about]:[]),...work,allWork,...(contact?[contact]:[])];
+  reset();
+ }catch(err){console.warn('Metro projects: using existing fallback capsules.',err)}
+}
+function findPublishedWork(name){return publishedWork.find(p=>p.name===name)}
+function renderProjectDetails(p){
+ const name=document.getElementById('detailName'),description=document.getElementById('detailDescription'),hero=document.getElementById('detailHero');
+ name.textContent=p.name;
+ description.textContent=p.description||'';
+ hero.replaceChildren();
+ hero.style.background='#fafaf8';hero.style.color='#111';
+ if(p.cover_url){
+  const media=document.createElement(p.cover_type==='video'?'video':'img');
+  media.src=p.cover_url;media.style.cssText='display:block;width:100%;max-height:65vh;object-fit:cover';
+  if(media.tagName==='VIDEO'){media.controls=true;media.autoplay=true;media.muted=true;media.playsInline=true}
+  hero.appendChild(media);
+ }else{hero.textContent=p.name}
+ const old=document.getElementById('metroContentBlocks');if(old)old.remove();
+ if(Array.isArray(p.blocks)&&p.blocks.length){
+  const wrapper=document.createElement('div');wrapper.id='metroContentBlocks';
+  wrapper.style.cssText='display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;margin:24px 0';
+  for(const b of p.blocks){
+   const el=document.createElement('div');el.style.gridColumn=b.width==='half'?'span 1':'1 / -1';
+   if(b.type==='text'||b.type==='heading'){el.textContent=b.content||'';el.style.whiteSpace='pre-wrap'}
+   else if(b.type==='image'||b.type==='video'){
+    const m=document.createElement(b.type==='video'?'video':'img');m.src=b.content||'';m.style.cssText='width:100%;display:block';
+    if(b.type==='video')m.controls=true;el.appendChild(m)
+   }else if(b.type==='gallery'){
+    for(const url of String(b.content||'').split('\\n').filter(Boolean)){const img=document.createElement('img');img.src=url.trim();img.style.cssText='width:100%;display:block;margin-bottom:12px';el.appendChild(img)}
+   }
+   wrapper.appendChild(el);
+  }
+  hero.after(wrapper);
+ }
+}
 const logoImg=new Image();logoImg.src='public/logo/metro-logo.svg?v=pdf-vector-20261023';
 function logoRect(){const scale=Math.min(W/1920*.91,H/680*.69);return {x:(W-1920*scale)/2,y:H*(W<=700?.82:.68)-340*scale,w:1920*scale,h:680*scale}}
 function drawLogo(c){if(!logoImg.complete)return;const r=logoRect();c.drawImage(logoImg,r.x,r.y,r.w,r.h)}
@@ -111,4 +166,11 @@ function step(){
 }
 function draw(){ctx.clearRect(0,0,W,H);ctx.fillStyle='#fafaf8';ctx.fillRect(0,0,W,H);ctx.fillStyle='#050505';drawLogo(ctx);for(let p of items){ctx.save();ctx.translate(p.x,p.y);ctx.rotate(p.angle);ctx.beginPath();ctx.roundRect(-p.w/2,-p.h/2,p.w,p.h,p.h/2);ctx.fillStyle=hover===p?'#111':'#fafaf8';ctx.strokeStyle='#111';ctx.lineWidth=Math.max(1.1,p.h/26);ctx.fill();ctx.stroke();ctx.fillStyle=hover===p?'#fff':'#111';ctx.font=`500 ${(W<=700?19:Math.min(22.4,Math.max(18.5,22.4*Math.min(1,W/1200))))}px 'Aeonik Pro',Arial`;ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(p.name,0,1);ctx.restore()}}
 let previewTargetX=-999,previewTargetY=-999,previewX=-999,previewY=-999,previewProject=null;function tick(){if(!overlay.classList.contains('show')&&!document.getElementById('contactOverlay').classList.contains('show')){step();draw()}if(preview.classList.contains('visible')){if(previewX===-999){previewX=previewTargetX;previewY=previewTargetY}previewX+=(previewTargetX-previewX)*.14;previewY+=(previewTargetY-previewY)*.14;preview.style.left=previewX+'px';preview.style.top=previewY+'px'}else{previewX=-999;previewY=-999;previewProject=null}requestAnimationFrame(tick)}function point(e){let r=canvas.getBoundingClientRect();return {x:e.clientX-r.left,y:e.clientY-r.top}}function hit(x,y){for(let i=items.length-1;i>=0;i--){let p=items[i],dx=x-p.x,dy=y-p.y,c=Math.cos(-p.angle),s=Math.sin(-p.angle),rx=dx*c-dy*s,ry=dx*s+dy*c;if(Math.abs(rx)<p.w/2&&Math.abs(ry)<p.h/2)return p}return null}
-canvas.addEventListener('pointermove',e=>{mouse=point(e);if(drag){wake(drag);let dx=mouse.x-drag.x,dy=mouse.y-drag.y;drag.vx=dx*.23;drag.vy=dy*.23;drag.x=mouse.x;drag.y=mouse.y;drag.spin=dx*.0008}let h=drag||hit(mouse.x,mouse.y);hover=h;canvas.style.cursor=h?'grab':'default';if(h&&!drag){if(h.type==='about'||h.type==='contact'){preview.classList.remove('visible');}else{preview.classList.add('visible');preview.classList.toggle('leftside',mouse.x>W*.56);previewTargetX=mouse.x;previewTargetY=mouse.y;if(previewProject!==h.name){previewProject=h.name;art.classList.remove('switching');void art.offsetWidth;art.classList.add('switching');art.style.background=h.type==='about'?'#f0efea':h.color;art.style.color=h.ink;art.textContent=h.type==='about'?'Metro ↗':h.label;pname.textContent=h.name;}preview.querySelector('.preview-label span:last-child').textContent='VIEW PROJECT ↗';}}else preview.classList.remove('visible')});canvas.addEventListener('pointerdown',e=>{const m=point(e);drag=hit(m.x,m.y);if(drag){wake(drag);for(const p of items)if(p!==drag&&Math.hypot(p.x-drag.x,p.y-drag.y)<190)wake(p);canvas.setPointerCapture(e.pointerId);drag.downX=m.x;drag.downY=m.y;drag.downTime=Date.now()}});canvas.addEventListener('pointerup',e=>{if(!drag)return;let p=drag,m=point(e),click=Math.hypot(m.x-p.downX,m.y-p.downY)<12&&Date.now()-p.downTime<350;drag=null;for(const q of items)if(q!==p&&Math.hypot(q.x-p.x,q.y-p.y)<170)wake(q);if(click){if(p.type==='contact'){document.getElementById('contactOverlay').classList.add('show');preview.classList.remove('visible');return}document.getElementById('detailName').textContent=p.name;document.getElementById('detailDescription').textContent=p.type==='about'?'Metro is an independent creative branding studio based in Cairo, specializing in contemporary Arabic branding. We bring together cultural understanding, strategic thinking, and creative design to build distinctive brands.':'Selected work · Metro Design Studio. This is a prototype case study; final images and project story will be added next.';let hero=document.getElementById('detailHero');hero.style.background=p.color;hero.style.color=p.ink;hero.textContent=p.label;overlay.classList.add('show');preview.classList.remove('visible')}});canvas.addEventListener('pointerleave',()=>{hover=null;preview.classList.remove('visible')});document.getElementById('close').onclick=()=>overlay.classList.remove('show');document.getElementById('contactClose').onclick=()=>document.getElementById('contactOverlay').classList.remove('show');window.addEventListener('resize',size);size();tick()})();
+canvas.addEventListener('pointermove',e=>{mouse=point(e);if(drag){wake(drag);let dx=mouse.x-drag.x,dy=mouse.y-drag.y;drag.vx=dx*.23;drag.vy=dy*.23;drag.x=mouse.x;drag.y=mouse.y;drag.spin=dx*.0008}let h=drag||hit(mouse.x,mouse.y);hover=h;canvas.style.cursor=h?'grab':'default';if(h&&!drag){if(h.type==='about'||h.type==='contact'||h.type==='work'){preview.classList.remove('visible');}else{preview.classList.add('visible');preview.classList.toggle('leftside',mouse.x>W*.56);previewTargetX=mouse.x;previewTargetY=mouse.y;if(previewProject!==h.name){previewProject=h.name;art.classList.remove('switching');void art.offsetWidth;art.classList.add('switching');art.style.background=h.type==='about'?'#f0efea':h.color;art.style.color=h.ink;art.textContent=h.type==='about'?'Metro ↗':h.label;if(h.cover_url){art.style.backgroundImage='url("'+encodeURI(h.cover_url).replace(/"/g,'%22')+'")';art.style.backgroundSize='cover';art.style.backgroundPosition='center';art.textContent='';}else art.style.backgroundImage='none';pname.textContent=h.name;}preview.querySelector('.preview-label span:last-child').textContent='VIEW PROJECT ↗';}}else preview.classList.remove('visible')});canvas.addEventListener('pointerdown',e=>{const m=point(e);drag=hit(m.x,m.y);if(drag){wake(drag);for(const p of items)if(p!==drag&&Math.hypot(p.x-drag.x,p.y-drag.y)<190)wake(p);canvas.setPointerCapture(e.pointerId);drag.downX=m.x;drag.downY=m.y;drag.downTime=Date.now()}});canvas.addEventListener('pointerup',e=>{if(!drag)return;let p=drag,m=point(e),click=Math.hypot(m.x-p.downX,m.y-p.downY)<12&&Date.now()-p.downTime<350;drag=null;for(const q of items)if(q!==p&&Math.hypot(q.x-p.x,q.y-p.y)<170)wake(q);if(click){if(p.type==='work'){
+  const all=publishedWork;
+  const name=document.getElementById('detailName'),description=document.getElementById('detailDescription'),hero=document.getElementById('detailHero');
+  name.textContent='All Work';description.textContent='Selected projects by Metro Design Studio.';
+  hero.replaceChildren();hero.style.cssText='display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:16px;background:#fafaf8;color:#111';
+  for(const project of all){const b=document.createElement('button');b.textContent=project.name;b.style.cssText='padding:22px;border:1px solid #111;background:white;border-radius:20px;cursor:pointer;font:inherit';b.onclick=()=>renderProjectDetails(project);hero.appendChild(b)}
+  document.getElementById('overlay').classList.add('show');preview.classList.remove('visible');return
+ }if(p.type==='contact'){document.getElementById('contactOverlay').classList.add('show');preview.classList.remove('visible');return}if(p.type==='project'){renderProjectDetails(p);overlay.classList.add('show');preview.classList.remove('visible');return}document.getElementById('detailName').textContent=p.name;document.getElementById('detailDescription').textContent=p.type==='about'?'Metro is an independent creative branding studio based in Cairo, specializing in contemporary Arabic branding. We bring together cultural understanding, strategic thinking, and creative design to build distinctive brands.':'Selected work · Metro Design Studio. This is a prototype case study; final images and project story will be added next.';let hero=document.getElementById('detailHero');hero.style.background=p.color;hero.style.color=p.ink;hero.textContent=p.label;overlay.classList.add('show');preview.classList.remove('visible')}});canvas.addEventListener('pointerleave',()=>{hover=null;preview.classList.remove('visible')});document.getElementById('close').onclick=()=>overlay.classList.remove('show');document.getElementById('contactClose').onclick=()=>document.getElementById('contactOverlay').classList.remove('show');window.addEventListener('resize',size);size();tick();loadPublishedWork()})();
