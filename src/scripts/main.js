@@ -29,6 +29,7 @@ function renderProjectDetails(p){
  name.textContent=p.name;
  description.textContent=p.description||'';
  hero.replaceChildren();
+ hero.classList.remove('work-grid');hero.removeAttribute('style');
  hero.style.background='#fafaf8';hero.style.color='#111';
  if(p.cover_url){
   const media=document.createElement(p.cover_type==='video'?'video':'img');
@@ -169,7 +170,26 @@ canvas.addEventListener('pointermove',e=>{mouse=point(e);if(drag){wake(drag);let
   const all=publishedWork;
   const name=document.getElementById('detailName'),description=document.getElementById('detailDescription'),hero=document.getElementById('detailHero');
   name.textContent='All Work';description.textContent='Selected projects by Metro Design Studio.';
-  hero.replaceChildren();hero.style.cssText='display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:16px;background:#fafaf8;color:#111';
-  for(const project of all){const b=document.createElement('button');b.textContent=project.name;b.style.cssText='padding:22px;border:1px solid #111;background:white;border-radius:20px;cursor:pointer;font:inherit';b.onclick=()=>renderProjectDetails(project);hero.appendChild(b)}
+  document.getElementById('metroContentBlocks')?.remove();
+  hero.replaceChildren();
+  hero.removeAttribute('style');
+  hero.classList.add('work-grid');
+  for(const project of all){
+   const card=document.createElement('button');card.type='button';card.className='work-card';
+   const cover=document.createElement('div');cover.className='work-card-cover';
+   if(project.cover_url){
+    const media=document.createElement(project.cover_type==='video'?'video':'img');
+    media.src=project.cover_url;
+    if(media.tagName==='VIDEO'){media.muted=true;media.loop=true;media.playsInline=true;media.autoplay=true;media.setAttribute('aria-label',project.name+' cover')}
+    else{media.alt=project.name+' cover';media.loading='lazy'}
+    cover.appendChild(media);
+   }else{
+    const placeholder=document.createElement('span');placeholder.textContent=project.name;cover.appendChild(placeholder);
+   }
+   const caption=document.createElement('span');caption.className='work-card-name';caption.textContent=project.name;
+   card.append(cover,caption);
+   card.onclick=()=>renderProjectDetails(project);
+   hero.appendChild(card);
+  }
   document.getElementById('overlay').classList.add('show');preview.classList.remove('visible');return
  }if(p.type==='contact'){document.getElementById('contactOverlay').classList.add('show');preview.classList.remove('visible');return}if(p.type==='project'){renderProjectDetails(p);overlay.classList.add('show');preview.classList.remove('visible');return}document.getElementById('detailName').textContent=p.name;document.getElementById('detailDescription').textContent=p.type==='about'?'Metro is an independent creative branding studio based in Cairo, specializing in contemporary Arabic branding. We bring together cultural understanding, strategic thinking, and creative design to build distinctive brands.':'Selected work · Metro Design Studio. This is a prototype case study; final images and project story will be added next.';let hero=document.getElementById('detailHero');hero.style.background=p.color;hero.style.color=p.ink;hero.textContent=p.label;overlay.classList.add('show');preview.classList.remove('visible')}});canvas.addEventListener('pointerleave',()=>{hover=null;preview.classList.remove('visible')});document.getElementById('close').onclick=()=>overlay.classList.remove('show');document.getElementById('contactClose').onclick=()=>document.getElementById('contactOverlay').classList.remove('show');window.addEventListener('resize',size);size();tick();Promise.all([loadPublishedWork(),new Promise(resolve=>{if(logoImg.complete)return resolve();logoImg.addEventListener('load',resolve,{once:true});logoImg.addEventListener('error',resolve,{once:true})})]).then(()=>{buildMask();sceneReady=true;reset()})})();
