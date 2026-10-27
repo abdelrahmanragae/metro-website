@@ -1,6 +1,6 @@
-// Copy this file to config.js and fill in the public Supabase project URL and anon key.
-// Never put a service_role or secret key here.
+// Metro Studio public browser configuration.
+// Add ONLY the Supabase publishable key (sb_publishable_...). Never add secret keys.
 window.METRO_CONFIG = {
-  url: "",
+  url: "https://tguzedylmdjhnyisvlpp.supabase.co",
   anonKey: ""
 };
