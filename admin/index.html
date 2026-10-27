@@ -58,7 +58,8 @@ else if(action==='message')messageEditor(+arg);else if(action==='backInbox')show
 }catch(e){alert(e.message)}});document.querySelectorAll('[data-toggle]').forEach(el=>el.onchange=async()=>{const table=current==='Projects'?'projects':current==='Team'?'team_members':'contact_links';const rec=records[+el.dataset.i];try{await save(table,{[el.dataset.toggle]:el.checked},rec.id);if(table==='projects'&&el.dataset.toggle==='published'&&!el.checked){await save(table,{on_homepage:false},rec.id)}show(current)}catch(e){alert(e.message);el.checked=!el.checked}})}
 $('#loginForm').onsubmit=async e=>{e.preventDefault();if(!sb){$('#loginError').textContent='Supabase has not been configured yet.';return}const {error}=await sb.auth.signInWithPassword({email:$('#email').value,password:$('#password').value});if(error){$('#loginError').textContent=error.message;return}boot()};
 $('#signOut').onclick=async()=>{await sb.auth.signOut();location.reload()};
-async function boot(){if(!sb)return;const {data:{session}}=await sb.auth.getSession();$('#login').classList.toggle('hidden',!!session);$('#app').classList.toggle('hidden',!session);if(session){$('#userEmail').textContent=session.user.email;show('Overview')}}
+let activeUserId=null;
+async function boot(){if(!sb)return;const {data:{session}}=await sb.auth.getSession();$('#login').classList.toggle('hidden',!!session);$('#app').classList.toggle('hidden',!session);if(session){$('#userEmail').textContent=session.user.email;if(activeUserId!==session.user.id){activeUserId=session.user.id;show('Overview')}}else{activeUserId=null}}
 if(sb){sb.auth.onAuthStateChange(()=>setTimeout(boot,0));boot()}
 </script>
 </body></html>
