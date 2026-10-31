@@ -24,8 +24,40 @@ async function loadPublishedWork(){
  }catch(err){console.warn('Metro projects: using existing fallback capsules.',err)}
 }
 function findPublishedWork(name){return publishedWork.find(p=>p.name===name)}
+function configureAutoplay(video){
+ video.controls=true;
+ video.autoplay=true;
+ video.muted=true;
+ video.defaultMuted=true;
+ video.playsInline=true;
+ video.setAttribute('playsinline','');
+ video.setAttribute('muted','');
+ video.preload='metadata';
+ video.addEventListener('canplay',()=>{if(video.isConnected)video.play().catch(()=>{})},{once:true});
+}
+function makeProjectCard(project){
+ const card=document.createElement('button');card.type='button';card.className='work-card';
+ const cover=document.createElement('div');cover.className='work-card-cover';
+ if(project.cover_url){
+  const media=document.createElement(project.cover_type==='video'?'video':'img');
+  media.src=project.cover_url;
+  if(media.tagName==='VIDEO'){configureAutoplay(media);media.loop=true;media.controls=false;media.setAttribute('aria-label',project.name+' cover')}
+  else{media.alt=project.name+' cover';media.loading='lazy'}
+  cover.appendChild(media);
+ }else{
+  const placeholder=document.createElement('span');placeholder.textContent=project.name;cover.appendChild(placeholder);
+ }
+ const caption=document.createElement('span');caption.className='work-card-name';caption.textContent=project.name;
+ card.append(cover,caption);
+ card.onclick=()=>renderProjectDetails(project);
+ return card;
+}
 function renderProjectDetails(p){
  const name=document.getElementById('detailName'),description=document.getElementById('detailDescription'),hero=document.getElementById('detailHero');
+ const overlay=document.getElementById('overlay');
+ // Remove previously rendered media and recommendations before opening another project.
+ document.getElementById('metroContentBlocks')?.remove();
+ document.getElementById('metroMoreProjects')?.remove();
  name.textContent=p.name;
  description.textContent=p.description||'';
  hero.replaceChildren();
@@ -34,10 +66,11 @@ function renderProjectDetails(p){
  if(p.cover_url){
   const media=document.createElement(p.cover_type==='video'?'video':'img');
   media.src=p.cover_url;media.style.cssText='display:block;width:100%;height:auto;max-height:none;object-fit:contain';
-  if(media.tagName==='VIDEO'){media.controls=true;media.autoplay=true;media.muted=true;media.playsInline=true}
+  if(media.tagName==='VIDEO')configureAutoplay(media);
+  else media.alt=p.name+' cover';
   hero.appendChild(media);
  }else{hero.textContent=p.name}
- const old=document.getElementById('metroContentBlocks');if(old)old.remove();
+ let lastSection=hero;
  if(Array.isArray(p.blocks)&&p.blocks.length){
   const wrapper=document.createElement('div');wrapper.id='metroContentBlocks';
   wrapper.style.cssText='display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;margin:24px 0';
@@ -45,15 +78,26 @@ function renderProjectDetails(p){
    const el=document.createElement('div');el.style.gridColumn=b.width==='half'?'span 1':'1 / -1';
    if(b.type==='text'||b.type==='heading'){el.textContent=b.content||'';el.style.whiteSpace='pre-wrap'}
    else if(b.type==='image'||b.type==='video'){
-    const m=document.createElement(b.type==='video'?'video':'img');m.src=b.content||'';m.style.cssText='width:100%;display:block';
-    if(b.type==='video')m.controls=true;el.appendChild(m)
+    const m=document.createElement(b.type==='video'?'video':'img');m.src=b.content||'';m.style.cssText='width:100%;height:auto;display:block';
+    if(b.type==='video')configureAutoplay(m);else m.loading='lazy';
+    el.appendChild(m)
    }else if(b.type==='gallery'){
-    for(const url of String(b.content||'').split('\\n').filter(Boolean)){const img=document.createElement('img');img.src=url.trim();img.style.cssText='width:100%;display:block;margin-bottom:12px';el.appendChild(img)}
+    for(const url of String(b.content||'').split(/\\r?\\n/).filter(Boolean)){const img=document.createElement('img');img.src=url.trim();img.loading='lazy';img.style.cssText='width:100%;height:auto;display:block;margin-bottom:12px';el.appendChild(img)}
    }
    wrapper.appendChild(el);
   }
-  hero.after(wrapper);
+  hero.after(wrapper);lastSection=wrapper;
  }
+ const others=publishedWork.filter(project=>project.id!==p.id&&project.slug!==p.slug&&project.name!==p.name).slice(0,2);
+ if(others.length){
+  const section=document.createElement('section');section.id='metroMoreProjects';section.className='more-projects';
+  const heading=document.createElement('h2');heading.textContent='Explore More Projects';
+  const grid=document.createElement('div');grid.className='more-projects-grid';
+  others.forEach(project=>grid.appendChild(makeProjectCard(project)));
+  section.append(heading,grid);lastSection.after(section);
+ }
+ overlay.scrollTop=0;
+ overlay.classList.add('show');
 }
 const logoImg=new Image();logoImg.src='public/logo/metro-logo.svg?v=pdf-vector-20261023';
 function logoRect(){const scale=Math.min(W/1920*.91,H/680*.69);return {x:(W-1920*scale)/2,y:H*(W<=700?.82:.68)-340*scale,w:1920*scale,h:680*scale}}
@@ -171,25 +215,10 @@ canvas.addEventListener('pointermove',e=>{mouse=point(e);if(drag){wake(drag);let
   const name=document.getElementById('detailName'),description=document.getElementById('detailDescription'),hero=document.getElementById('detailHero');
   name.textContent='All Work';description.textContent='Selected projects by Metro Design Studio.';
   document.getElementById('metroContentBlocks')?.remove();
+  document.getElementById('metroMoreProjects')?.remove();
   hero.replaceChildren();
   hero.removeAttribute('style');
   hero.classList.add('work-grid');
-  for(const project of all){
-   const card=document.createElement('button');card.type='button';card.className='work-card';
-   const cover=document.createElement('div');cover.className='work-card-cover';
-   if(project.cover_url){
-    const media=document.createElement(project.cover_type==='video'?'video':'img');
-    media.src=project.cover_url;
-    if(media.tagName==='VIDEO'){media.muted=true;media.loop=true;media.playsInline=true;media.autoplay=true;media.setAttribute('aria-label',project.name+' cover')}
-    else{media.alt=project.name+' cover';media.loading='lazy'}
-    cover.appendChild(media);
-   }else{
-    const placeholder=document.createElement('span');placeholder.textContent=project.name;cover.appendChild(placeholder);
-   }
-   const caption=document.createElement('span');caption.className='work-card-name';caption.textContent=project.name;
-   card.append(cover,caption);
-   card.onclick=()=>renderProjectDetails(project);
-   hero.appendChild(card);
-  }
-  document.getElementById('overlay').classList.add('show');preview.classList.remove('visible');return
+  for(const project of all)hero.appendChild(makeProjectCard(project));
+  document.getElementById('overlay').scrollTop=0;document.getElementById('overlay').classList.add('show');preview.classList.remove('visible');return
  }if(p.type==='contact'){document.getElementById('contactOverlay').classList.add('show');preview.classList.remove('visible');return}if(p.type==='project'){renderProjectDetails(p);overlay.classList.add('show');preview.classList.remove('visible');return}document.getElementById('detailName').textContent=p.name;document.getElementById('detailDescription').textContent=p.type==='about'?'Metro is an independent creative branding studio based in Cairo, specializing in contemporary Arabic branding. We bring together cultural understanding, strategic thinking, and creative design to build distinctive brands.':'Selected work · Metro Design Studio. This is a prototype case study; final images and project story will be added next.';let hero=document.getElementById('detailHero');hero.style.background=p.color;hero.style.color=p.ink;hero.textContent=p.label;overlay.classList.add('show');preview.classList.remove('visible')}});canvas.addEventListener('pointerleave',()=>{hover=null;preview.classList.remove('visible')});document.getElementById('close').onclick=()=>overlay.classList.remove('show');document.getElementById('contactClose').onclick=()=>document.getElementById('contactOverlay').classList.remove('show');window.addEventListener('resize',size);size();tick();Promise.all([loadPublishedWork(),new Promise(resolve=>{if(logoImg.complete)return resolve();logoImg.addEventListener('load',resolve,{once:true});logoImg.addEventListener('error',resolve,{once:true})})]).then(()=>{buildMask();sceneReady=true;reset()})})();
