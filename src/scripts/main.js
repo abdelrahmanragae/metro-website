@@ -33,7 +33,7 @@ function renderProjectDetails(p){
  hero.style.background='#fafaf8';hero.style.color='#111';
  if(p.cover_url){
   const media=document.createElement(p.cover_type==='video'?'video':'img');
-  media.src=p.cover_url;media.style.cssText='display:block;width:100%;max-height:65vh;object-fit:cover';
+  media.src=p.cover_url;media.style.cssText='display:block;width:100%;height:auto;max-height:none;object-fit:contain';
   if(media.tagName==='VIDEO'){media.controls=true;media.autoplay=true;media.muted=true;media.playsInline=true}
   hero.appendChild(media);
  }else{hero.textContent=p.name}
