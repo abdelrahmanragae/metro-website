@@ -24,3 +24,12 @@
 /* Tighter top spacing for project case-study headings. */
 .overlay:not(.contact-overlay) h1{margin-top:6vh}
 @media(max-width:650px){.overlay:not(.contact-overlay) h1{margin-top:6vh}}
+
+/* Consistent rounded media across the homepage and portfolio. */
+:root{--metro-media-radius:18px}
+.preview{border-radius:var(--metro-media-radius);overflow:hidden}
+.preview-art{border-radius:12px;overflow:hidden}
+.work-card-cover{border-radius:var(--metro-media-radius)}
+.overlay .hero:not(.work-grid){border-radius:var(--metro-media-radius);overflow:hidden}
+#metroContentBlocks img,#metroContentBlocks video{border-radius:var(--metro-media-radius);overflow:hidden}
+@media(max-width:650px){:root{--metro-media-radius:14px}.preview-art{border-radius:10px}}
