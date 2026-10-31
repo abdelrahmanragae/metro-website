@@ -47,3 +47,11 @@
 /* Case-study hero: preserve the entire cover image at its natural aspect ratio. */
 .overlay #detailHero:not(.work-grid){height:auto;min-height:0;display:block;overflow:hidden}
 .overlay #detailHero:not(.work-grid)>img,.overlay #detailHero:not(.work-grid)>video{width:100%;height:auto;max-height:none;object-fit:contain}
+
+/* Related portfolio work at the end of each case study */
+.more-projects{margin:clamp(64px,9vw,130px) 0 48px}
+.more-projects h2{font-size:clamp(28px,3.4vw,48px);font-weight:600;letter-spacing:0;line-height:1.1;margin:0 0 28px}
+.more-projects-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:36px 48px}
+.more-projects .work-card{display:flex;flex-direction:column;align-items:stretch;min-width:0;width:100%;border:0;padding:0;background:transparent;text-align:left;color:#111;cursor:pointer;font:inherit}
+.more-projects .work-card:focus-visible{outline:2px solid #111;outline-offset:5px;border-radius:var(--metro-media-radius)}
+@media(max-width:650px){.more-projects-grid{grid-template-columns:1fr;gap:28px}.more-projects{margin-top:64px}.more-projects h2{margin-bottom:22px}}
