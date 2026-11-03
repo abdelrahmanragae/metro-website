@@ -55,3 +55,16 @@
 .more-projects .work-card{display:flex;flex-direction:column;align-items:stretch;min-width:0;width:100%;border:0;padding:0;background:transparent;text-align:left;color:#111;cursor:pointer;font:inherit}
 .more-projects .work-card:focus-visible{outline:2px solid #111;outline-offset:5px;border-radius:var(--metro-media-radius)}
 @media(max-width:650px){.more-projects-grid{grid-template-columns:1fr;gap:28px}.more-projects{margin-top:64px}.more-projects h2{margin-bottom:22px}}
+
+/* Case studies: compact mobile typography, softer corners and full-width media. */
+@media(max-width:800px){
+ .overlay:not(.contact-overlay) h1{font-size:clamp(30px,6.5vw,46px);line-height:1.12;margin-bottom:18px}
+ .overlay:not(.contact-overlay) #detailDescription{font-size:16px;line-height:1.5;max-width:100%}
+ .overlay:not(.contact-overlay) #detailHero{margin-top:30px}
+ .overlay:not(.contact-overlay){--metro-media-radius:8px}
+ .overlay:not(.contact-overlay) #metroContentBlocks{grid-template-columns:minmax(0,1fr)!important;gap:14px!important}
+ .overlay:not(.contact-overlay) #metroContentBlocks>div{grid-column:1 / -1!important;width:100%;min-width:0}
+ .overlay:not(.contact-overlay) #metroContentBlocks img,
+ .overlay:not(.contact-overlay) #metroContentBlocks video{max-width:100%;height:auto}
+ .overlay:not(.contact-overlay) .work-card-cover{border-radius:8px}
+}
