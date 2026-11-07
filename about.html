@@ -87,6 +87,16 @@ html,body{max-width:100%;overflow-x:clip}
 
 /* Underline each capability category heading */
 .cap h3{text-decoration:underline;text-decoration-thickness:1.5px;text-underline-offset:.12em;text-decoration-skip-ink:auto}
+
+/* Refined About body typography and reduced Metro coins — 2026-11-07 */
+.hero-bottom .lead{font-size:clamp(22px,2.25vw,36px)!important;line-height:1.35!important}
+.hero-bottom .body{font-size:clamp(16px,1.25vw,20px)!important;line-height:1.55!important}
+.section-copy p{font-size:clamp(17px,1.32vw,21px)!important;line-height:1.48!important}
+.beliefs .belief strong{font-size:clamp(19px,1.75vw,29px)!important;line-height:1.42!important}
+.hero-art-layout{grid-template-columns:minmax(0,1.65fr) minmax(0,.8fr)!important}
+.hero-art-layout .hero-coins{width:76%!important;max-height:320px!important;justify-self:center}
+@media(max-width:800px){.hero-art-layout{grid-template-columns:1fr!important}.hero-art-layout .hero-coins{width:min(58%,360px)!important;max-height:230px!important;justify-self:end}}
+@media(max-width:480px){.hero-art-layout .hero-coins{width:57%!important;max-height:175px!important}}
 </style></head><body>
 <nav><a class="wordmark" href="./">Metro Design Studio</a><a class="back" href="./">← Back to Metro</a></nav>
 <main><section class="hero wrap"><div><div class="eyebrow">About Metro — Independent Branding Studio</div><div class="hero-art-layout"><h1>A creative<br>station for<br>brands.</h1><img class="hero-coins" src="assets/metro-coins.svg" alt="Metro coin illustrations" loading="eager" decoding="async"></div></div><div class="hero-bottom"><p class="lead">Rooted in culture.<br>Built for connection.</p><p class="body">Metro is an independent creative branding studio based in Cairo, specializing in contemporary Arabic branding. We bring together cultural understanding, strategic thinking, and creative design to build distinctive brands that reflect their identity, resonate with their audiences, and belong to the world they live in.</p></div></section>
