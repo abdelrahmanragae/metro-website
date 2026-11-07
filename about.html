@@ -97,6 +97,15 @@ html,body{max-width:100%;overflow-x:clip}
 .hero-art-layout .hero-coins{width:76%!important;max-height:320px!important;justify-self:center}
 @media(max-width:800px){.hero-art-layout{grid-template-columns:1fr!important}.hero-art-layout .hero-coins{width:min(58%,360px)!important;max-height:230px!important;justify-self:end}}
 @media(max-width:480px){.hero-art-layout .hero-coins{width:57%!important;max-height:175px!important}}
+
+/* About refinements: aligned intro and slightly larger hero artwork */
+.hero-bottom{align-items:start!important}
+.hero-bottom .body{margin-top:0!important;align-self:start!important}
+.hero-art-layout h1{font-size:clamp(74px,12.2vw,174px)!important;line-height:.98!important}
+.hero-art-layout{grid-template-columns:minmax(0,1.55fr) minmax(0,.9fr)!important}
+.hero-art-layout .hero-coins{width:88%!important;max-height:390px!important}
+@media(max-width:800px){.hero-art-layout{grid-template-columns:1fr!important}.hero-art-layout h1{font-size:clamp(65px,12vw,115px)!important}.hero-art-layout .hero-coins{width:min(68%,420px)!important;max-height:275px!important}}
+@media(max-width:480px){.hero-art-layout h1{font-size:clamp(58px,12vw,83px)!important}.hero-art-layout .hero-coins{width:66%!important;max-height:205px!important}}
 </style></head><body>
 <nav><a class="wordmark" href="./">Metro Design Studio</a><a class="back" href="./">← Back to Metro</a></nav>
 <main><section class="hero wrap"><div><div class="eyebrow">About Metro — Independent Branding Studio</div><div class="hero-art-layout"><h1>A creative<br>station for<br>brands.</h1><img class="hero-coins" src="assets/metro-coins.svg" alt="Metro coin illustrations" loading="eager" decoding="async"></div></div><div class="hero-bottom"><p class="lead">Rooted in culture.<br>Built for connection.</p><p class="body">Metro is an independent creative branding studio based in Cairo, specializing in contemporary Arabic branding. We bring together cultural understanding, strategic thinking, and creative design to build distinctive brands that reflect their identity, resonate with their audiences, and belong to the world they live in.</p></div></section>
