@@ -130,7 +130,7 @@ html,body{max-width:100%;overflow-x:clip}
  const map={
  'hero-title':'.hero-art-layout h1','hero-lead':'.hero-bottom .lead','hero-intro':'.hero-bottom .body',
  'story-title':'.section-head h2','story-one':'.section-head .section-copy p:first-child','story-two':'.section-head .section-copy p:nth-child(2)',
- 'philosophy-title':'.statement','vision-title':'.section.rule .section-head h2',
+ 'philosophy-title':'.statement','vision-title':null,
  'team-intro':'#metro-team'
  };
  fetch(api,{headers:{apikey:key}}).then(r=>{if(!r.ok)throw Error('Pages '+r.status);return r.json()}).then(rows=>{
@@ -151,7 +151,7 @@ html,body{max-width:100%;overflow-x:clip}
   for(const block of blocks){
    if(!block||typeof block.content!=='string'||!block.content.trim())continue;
    const selector=selectors[block.type];
-   const node=selector&&document.querySelector(selector);
+   const node=block.type==='vision-title'?Array.from(document.querySelectorAll('.section')).find(section=>section.querySelector('.eyebrow')?.textContent.trim()==='Our Vision')?.querySelector('h2'):selector&&document.querySelector(selector);
    if(node){node.textContent=block.content;node.style.whiteSpace='pre-line'}
    if(block.type==='team-intro'){const intro=document.querySelector('#metro-team');const prev=intro&&intro.previousElementSibling;if(prev&&prev.classList.contains('body'))prev.textContent=block.content}
   }
