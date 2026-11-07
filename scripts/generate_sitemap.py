@@ -9,7 +9,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 config = (ROOT / "admin/config.js").read_text(encoding="utf-8")
-url_match = re.search(r"https://[a-z0-9-]+\\.supabase\\.co", config)
+url_match = re.search(r"https://[a-z0-9-]+\.supabase\.co", config)
 key_match = re.search(r"sb_publishable_[A-Za-z0-9_-]+", config)
 if not url_match or not key_match:
     raise SystemExit("Supabase public configuration not found; sitemap unchanged.")
