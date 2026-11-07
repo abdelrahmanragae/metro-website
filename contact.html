@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Start a Journey | Contact Metro Design Studio</title><meta name="description" content="Contact Metro Design Studio for branding, brand strategy, visual identity and creative projects in Saudi Arabia, Egypt and the Gulf."><link rel="canonical" href="https://metrodesign.studio/contact.html">
+<meta property="og:title" content="Contact Metro Design Studio"><meta property="og:description" content="Start your next branding journey with Metro Design Studio."><meta property="og:url" content="https://metrodesign.studio/contact.html">
+<style>
+@font-face{font-family:Aeonik;src:url('Aeonik Pro Regular.ttf')}@font-face{font-family:Aeonik;src:url('Aeonik Pro Medium.ttf');font-weight:500}@font-face{font-family:Aeonik;src:url('Aeonik Pro Bold.ttf');font-weight:700}
+*{box-sizing:border-box}body{margin:0;background:#fafaf8;color:#111;font-family:Aeonik,Arial,sans-serif}a{color:inherit}nav{padding:25px 30px;display:flex;justify-content:space-between;align-items:center;gap:20px}nav a{text-decoration:none}nav .wordmark{font-weight:500;font-size:28px;letter-spacing:-1.2px}nav .back{border:1px solid #111;border-radius:50px;padding:12px 20px;font-size:16px;white-space:nowrap}
+main{min-height:calc(100vh - 120px);padding:75px 5vw 50px}.eyebrow{font-size:14px;font-weight:500;text-transform:uppercase;letter-spacing:.03em}h1{font-size:clamp(64px,10vw,160px);font-weight:500;line-height:.96;letter-spacing:normal;margin:45px 0 45px;max-width:1200px;white-space:pre-line}p{font-size:clamp(20px,2.2vw,34px);line-height:1.3;max-width:750px}section{border-top:1px solid #111;margin-top:100px;padding-top:25px;display:grid;grid-template-columns:1fr 2fr;gap:30px}.links{display:flex;flex-direction:column;gap:20px}.links a{font-size:clamp(25px,3.5vw,55px);text-decoration:none;overflow-wrap:anywhere}.links a:hover{text-decoration:underline}footer{padding:30px 5vw;display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;font-size:14px}.arrow{width:64px;height:64px;background:#ff160a;color:white;border-radius:50%;display:grid;place-items:center;margin:55px 0 0 auto;font-size:45px}
+@media(max-width:700px){nav{padding:20px}nav .wordmark{font-size:21px}nav .back{font-size:13px;padding:10px 13px}main{padding-top:55px}h1{font-size:clamp(50px,12vw,90px)}section{grid-template-columns:1fr;margin-top:65px}.links a{font-size:26px}}
+</style></head><body><nav><a class="wordmark" href="./">Metro Design Studio</a><a class="back" href="./">← Back to Metro</a></nav>
+<main><div class="eyebrow">Start a Journey</div><h1 id="contact-heading">Your brand’s next stop starts here.</h1><p id="contact-description">Tell us about your project. We would love to hear from you.</p><div class="arrow" aria-hidden="true">→</div>
+<section><div class="eyebrow">Get in touch</div><div class="links" id="contact-links"><a href="mailto:hello@metrodesign.studio">hello@metrodesign.studio</a></div></section></main>
+<footer><span>Metro Design Studio</span><span>Arabic at Heart. Contemporary by Design.</span><span>© Metro 2026</span></footer>
+<script>
+(async function(){
+ const base='https://tguzedylmdjhnyisvlpp.supabase.co/rest/v1/';
+ const key='sb_publishable_eEYCG49VVJlESrEpCBIOfg_mGXxCawb';
+ async function get(path){const r=await fetch(base+path,{headers:{apikey:key}});if(!r.ok)throw Error('CMS '+r.status);return r.json()}
+ try{
+  const [pages,links]=await Promise.all([get('pages?slug=eq.contact&select=title,intro,sections'),get('contact_links?visible=eq.true&select=label,value,url&order=created_at.asc')]);
+  const page=pages[0];
+  if(page){
+   if(page.intro?.trim())document.getElementById('contact-description').textContent=page.intro;
+   for(const block of (Array.isArray(page.sections)?page.sections:[])){
+    const target=block.type==='contact-heading'?'contact-heading':block.type==='contact-description'?'contact-description':null;
+    if(target&&typeof block.content==='string'&&block.content.trim())document.getElementById(target).textContent=block.content;
+   }
+  }
+  if(Array.isArray(links)&&links.length){
+   const box=document.getElementById('contact-links');box.replaceChildren();
+   for(const link of links){
+    const value=String(link.value||link.label||'').trim();
+    let url=String(link.url||'').trim();
+    if(!url&&value.includes('@'))url='mailto:'+value;
+    if(!/^(https?:\/\/|mailto:|tel:)/i.test(url))continue;
+    const a=document.createElement('a');a.href=url;a.textContent=value||url;
+    if(/^https?:\/\//i.test(url)){a.target='_blank';a.rel='noopener noreferrer'}
+    box.append(a);
+   }
+   if(!box.children.length){const a=document.createElement('a');a.href='mailto:hello@metrodesign.studio';a.textContent='hello@metrodesign.studio';box.append(a)}
+  }
+ }catch(e){console.warn('Contact CMS unavailable; using default details.',e)}
+})();
+</script></body></html>
