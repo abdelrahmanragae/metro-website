@@ -35,6 +35,7 @@ function configureAutoplay(video){
  video.preload='metadata';
  video.addEventListener('canplay',()=>{if(video.isConnected)video.play().catch(()=>{})},{once:true});
 }
+function projectUrl(p){return 'projects/?slug='+encodeURIComponent(p.slug||p.name.toLowerCase().trim().replace(/[^a-z0-9]+/g,'-'))}
 function makeProjectCard(project){
  const card=document.createElement('button');card.type='button';card.className='work-card';
  const cover=document.createElement('div');cover.className='work-card-cover';
@@ -49,7 +50,7 @@ function makeProjectCard(project){
  }
  const caption=document.createElement('span');caption.className='work-card-name';caption.textContent=project.name;
  card.append(cover,caption);
- card.onclick=()=>renderProjectDetails(project);
+ card.onclick=()=>{window.location.href=projectUrl(project)};
  return card;
 }
 function renderProjectDetails(p){
@@ -221,4 +222,4 @@ canvas.addEventListener('pointermove',e=>{mouse=point(e);if(drag){wake(drag);let
   hero.classList.add('work-grid');
   for(const project of all)hero.appendChild(makeProjectCard(project));
   document.getElementById('overlay').scrollTop=0;document.getElementById('overlay').classList.add('show');preview.classList.remove('visible');return
- }if(p.type==='contact'){document.getElementById('contactOverlay').classList.add('show');preview.classList.remove('visible');return}if(p.type==='project'){renderProjectDetails(p);overlay.classList.add('show');preview.classList.remove('visible');return}document.getElementById('detailName').textContent=p.name;document.getElementById('detailDescription').textContent=p.type==='about'?'Metro is an independent creative branding studio based in Cairo, specializing in contemporary Arabic branding. We bring together cultural understanding, strategic thinking, and creative design to build distinctive brands.':'Selected work · Metro Design Studio. This is a prototype case study; final images and project story will be added next.';let hero=document.getElementById('detailHero');hero.style.background=p.color;hero.style.color=p.ink;hero.textContent=p.label;overlay.classList.add('show');preview.classList.remove('visible')}});canvas.addEventListener('pointerleave',()=>{hover=null;preview.classList.remove('visible')});document.getElementById('close').onclick=()=>overlay.classList.remove('show');document.getElementById('contactClose').onclick=()=>document.getElementById('contactOverlay').classList.remove('show');window.addEventListener('resize',size);size();tick();Promise.all([loadPublishedWork(),new Promise(resolve=>{if(logoImg.complete)return resolve();logoImg.addEventListener('load',resolve,{once:true});logoImg.addEventListener('error',resolve,{once:true})})]).then(()=>{buildMask();sceneReady=true;reset()})})();
+ }if(p.type==='contact'){document.getElementById('contactOverlay').classList.add('show');preview.classList.remove('visible');return}if(p.type==='project'){window.location.href=projectUrl(p);return}document.getElementById('detailName').textContent=p.name;document.getElementById('detailDescription').textContent=p.type==='about'?'Metro is an independent creative branding studio based in Cairo, specializing in contemporary Arabic branding. We bring together cultural understanding, strategic thinking, and creative design to build distinctive brands.':'Selected work · Metro Design Studio. This is a prototype case study; final images and project story will be added next.';let hero=document.getElementById('detailHero');hero.style.background=p.color;hero.style.color=p.ink;hero.textContent=p.label;overlay.classList.add('show');preview.classList.remove('visible')}});canvas.addEventListener('pointerleave',()=>{hover=null;preview.classList.remove('visible')});document.getElementById('close').onclick=()=>overlay.classList.remove('show');document.getElementById('contactClose').onclick=()=>document.getElementById('contactOverlay').classList.remove('show');window.addEventListener('resize',size);size();tick();Promise.all([loadPublishedWork(),new Promise(resolve=>{if(logoImg.complete)return resolve();logoImg.addEventListener('load',resolve,{once:true});logoImg.addEventListener('error',resolve,{once:true})})]).then(()=>{buildMask();sceneReady=true;reset()})})();
