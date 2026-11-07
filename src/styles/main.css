@@ -69,3 +69,7 @@
  .overlay:not(.contact-overlay) .work-card-cover{border-radius:8px}
 }
 
+
+/* Suggested case studies: show complete cover without cropping. */
+.more-projects .work-card-cover{aspect-ratio:auto;display:block;overflow:hidden;background:#ecece8}
+.more-projects .work-card-cover img,.more-projects .work-card-cover video{width:100%;height:auto;max-height:none;object-fit:contain;display:block}
