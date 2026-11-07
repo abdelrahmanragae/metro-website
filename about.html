@@ -64,9 +64,23 @@ html,body{max-width:100%;overflow-x:clip}
 @media(max-width:800px){.cap li{font-size:14px;line-height:1.6}}
 
 .people .team-status{font-size:17px;opacity:.65}.person h3{overflow-wrap:anywhere}
+
+/* Metro coins — supplied original vector, balanced with hero title */
+.hero-art-layout{display:grid;grid-template-columns:minmax(0,1.45fr) minmax(0,1fr);align-items:center;column-gap:clamp(20px,3vw,65px);margin:28px 0 45px}
+.hero-art-layout h1{font-size:clamp(58px,7.7vw,132px);max-width:none;margin:0;line-height:.94;letter-spacing:-.055em}
+.hero-coins{display:block;width:100%;height:auto;max-height:440px;object-fit:contain;object-position:center}
+@media(max-width:800px){
+.hero-art-layout{grid-template-columns:1fr;gap:22px;margin:26px 0 40px}
+.hero-art-layout h1{font-size:clamp(57px,10vw,95px)}
+.hero-coins{width:min(78%,520px);max-height:280px;justify-self:end}
+}
+@media(max-width:480px){
+.hero-art-layout h1{font-size:clamp(52px,11.4vw,70px)}
+.hero-coins{width:85%;max-height:215px}
+}
 </style></head><body>
 <nav><a class="wordmark" href="./">Metro Design Studio</a><a class="back" href="./">← Back to Metro</a></nav>
-<main><section class="hero wrap"><div><div class="eyebrow">About Metro — Independent Branding Studio</div><h1>A creative<br>station for<br>brands.</h1></div><div class="hero-bottom"><p class="lead">Rooted in culture.<br>Built for connection.</p><p class="body">Metro is an independent creative branding studio based in Cairo, specializing in contemporary Arabic branding. We bring together cultural understanding, strategic thinking, and creative design to build distinctive brands that reflect their identity, resonate with their audiences, and belong to the world they live in.</p></div></section>
+<main><section class="hero wrap"><div><div class="eyebrow">About Metro — Independent Branding Studio</div><div class="hero-art-layout"><h1>A creative<br>station for<br>brands.</h1><img class="hero-coins" src="assets/metro-coins.svg" alt="Metro coin illustrations" loading="eager" decoding="async"></div></div><div class="hero-bottom"><p class="lead">Rooted in culture.<br>Built for connection.</p><p class="body">Metro is an independent creative branding studio based in Cairo, specializing in contemporary Arabic branding. We bring together cultural understanding, strategic thinking, and creative design to build distinctive brands that reflect their identity, resonate with their audiences, and belong to the world they live in.</p></div></section>
 <section class="section rule"><div class="section-head"><span class="eyebrow">Our Story</span><div><h2>Every brand<br>has a journey.</h2><div class="section-copy"><p>Inspired by the city we come from, Metro takes its name from the movement, connections, and journeys that shape everyday life in Cairo.</p><p>We see every brand as a journey of discovery and transformation. Our role is to help ideas find their direction, develop their identity, and reach the people they are made for.</p></div></div></div></section>
 <section class="section dark"><span class="eyebrow">Our Philosophy</span><p class="statement">Culture is more than inspiration.</p><div class="section-copy"><p class="body">We believe great branding starts with understanding the people, culture, and context behind every brand.</p><p class="body">Rather than simply following global trends, we create identities that draw from their own cultural roots, combining authentic character with contemporary creative expression.</p></div></section>
 <section class="section"><span class="eyebrow">What We Believe</span><h2 style="margin-top:35px">What moves us.</h2><div class="beliefs metro-beliefs"><p><span class="belief-dot red">1</span> Culture gives brands character. <span class="belief-dot yellow">2</span> Every brand deserves its own visual language. <span class="belief-dot blue">3</span> Understanding comes before expression. <span class="belief-dot green">4</span> Authenticity and modernity belong together.</p></div></section>
