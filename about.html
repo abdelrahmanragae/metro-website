@@ -136,6 +136,8 @@ html,body{max-width:100%;overflow-x:clip}
  fetch(api,{headers:{apikey:key}}).then(r=>{if(!r.ok)throw Error('Pages '+r.status);return r.json()}).then(rows=>{
   const page=rows[0];if(!page)return;
   const blocks=Array.isArray(page.sections)?page.sections:[];
+  const teamVisibility=blocks.find(b=>b.type==='team-visibility');
+  if(teamVisibility?.content==='hide')document.getElementById('metro-team')?.closest('section')?.remove();
   const selectors={
    'hero-title':'.hero-art-layout h1',
    'hero-lead':'.hero-bottom .lead',
