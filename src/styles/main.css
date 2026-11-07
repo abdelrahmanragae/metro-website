@@ -73,3 +73,7 @@
 /* Suggested case studies: show complete cover without cropping. */
 .more-projects .work-card-cover{aspect-ratio:auto;display:block;overflow:hidden;background:#ecece8}
 .more-projects .work-card-cover img,.more-projects .work-card-cover video{width:100%;height:auto;max-height:none;object-fit:contain;display:block}
+
+/* Match Contact headline to About Metro's 'A creative station for brands' typography. */
+.contact-overlay .contact-content h1{font-size:clamp(68px,8.5vw,150px);font-weight:500;line-height:.98;letter-spacing:normal;margin:5vh 0 30px}
+@media(max-width:650px){.contact-overlay .contact-content h1{font-size:clamp(48px,11vw,82px);line-height:1.02}}
