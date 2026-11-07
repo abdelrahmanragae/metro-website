@@ -92,11 +92,12 @@ const pageDefaults={
 function pageEditor(i){edit=records[i];blocks=structuredClone(edit.sections||[]);
  if(pageDefaults[edit.slug]){
   const fixed=pageDefaults[edit.slug];
+  const curated=[];
   for(const [type,label,content] of fixed){
    const existing=blocks.find(b=>b.type===type);
-   if(existing){existing.label=label;continue}
-   blocks.push({type,label,content,width:'full'});
+   curated.push(existing?{...existing,label}:{type,label,content,width:'full'});
   }
+  blocks=[...curated,...blocks.filter(b=>!fixed.some(([type])=>type===b.type))];
  }
 $('#view').innerHTML=title('Edit '+edit.title,'Edit the live website copy below. Save Page to publish changes.',button('← Pages','backPages'))+'<div class="editor"><div class="panel">'+field('Page Title',edit.title)+field('Intro',edit.intro,'textarea')+'</div><div class="panel"><h2>Sections</h2><div id="blocks"></div><div class="row"><select id="blockType" class="btn"><option value="heading">Heading</option><option value="text">Text</option><option value="image">Image</option><option value="video">Video</option><option value="image-text">Image + Text</option><option value="gallery">Gallery</option><option value="team">Team</option><option value="contact-form">Contact Form</option><option value="contact-links">Contact Links</option></select>'+button('+ Add Section','addBlock')+'</div></div>'+button('Save Page','savePage','primary')+'</div>';renderBlocks();bind()}
 async function listContacts(){records=await load('contact_links');$('#view').innerHTML=title('Contact & Social Links','Update links once and reuse them across the website.',button('+ Add Link','newContact','primary'))+'<div class="panel"><table class="table"><thead><tr><th>Label</th><th>Value</th><th>Visible</th><th>Actions</th></tr></thead><tbody>'+records.map((c,i)=>'<tr><td>'+escapeHTML(c.label)+'</td><td>'+escapeHTML(c.value)+'</td><td><input type="checkbox" class="check" data-toggle="visible" data-i="'+i+'" '+(c.visible?'checked':'')+'></td><td><div class="actions">'+button('Edit','contact:'+i)+button('Delete','deleteContact:'+i,'danger')+'</div></td></tr>').join('')+'</tbody></table></div>';bind()}
