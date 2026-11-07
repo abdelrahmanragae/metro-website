@@ -11,6 +11,53 @@
 .cta{position:relative;overflow:hidden}.metro-arrow{position:absolute;right:8%;top:65px;width:clamp(90px,12vw,185px)}.metro-arrow svg{display:block;width:100%}.journey-sign{display:flex!important;align-items:center;justify-content:space-between;gap:50px;width:min(700px,75%);padding:35px 42px!important;border:0!important;border-radius:35px;background:#276e19;color:white;text-decoration:none!important;transform:rotate(-20deg);margin:20px 0 85px 10%;font-size:clamp(26px,4vw,65px)!important;line-height:1.02;font-weight:700;letter-spacing:-.04em;transition:transform .3s ease}.journey-sign:hover{transform:rotate(-14deg) scale(1.02)}.journey-sign svg{width:clamp(45px,7vw,105px);flex-shrink:0}.cta>a:not(.journey-sign){display:inline-block}
 @media(max-width:800px){.metro-beliefs p{font-size:clamp(34px,7vw,62px)}.metro-route{min-height:0;margin:50px 0 0}.route-line{display:none}.route-stages{grid-template-columns:1fr 1fr;gap:55px 25px;padding:0}.route-stage,.route-stage.stage-three,.route-stage.stage-four{padding:35px 0 0;border-top:12px solid #ff2828;position:relative}.route-stage:before{content:"";position:absolute;width:24px;height:24px;background:#000;border-radius:50%;top:-18px;left:0}.route-stage h3{font-size:clamp(28px,5vw,45px)}.route-stage h4{min-height:0;margin-bottom:14px}.station-label,.stage-one .station-label,.stage-two .station-label,.stage-three .station-label,.stage-four .station-label{position:static;display:block;transform:none;margin:0 0 12px;font-size:14px}.journey-sign{width:80%;padding:24px!important;margin:55px 0 90px 6%;border-radius:22px;gap:20px}.metro-arrow{right:5%;top:85px;width:75px}}
 @media(max-width:480px){.route-stages{grid-template-columns:1fr;gap:35px}.route-stage h3{font-size:39px}.route-stage p{max-width:none}.metro-arrow{top:100px}.journey-sign{transform:rotate(-12deg);width:88%;margin-left:4%;font-size:30px!important}.journey-sign:hover{transform:rotate(-9deg)}}
+
+/* Layout corrections — 2026-11-07: stable responsive station map and signage */
+html,body{max-width:100%;overflow-x:clip}
+.metro-beliefs{max-width:1450px;margin:36px auto 0!important}
+.metro-beliefs p{font-size:clamp(27px,3.55vw,64px)!important;line-height:1.24!important;letter-spacing:-.035em!important;font-weight:500!important}
+.belief-dot{font-size:.7em!important;width:1.05em!important;height:1.05em!important;vertical-align:.045em!important;margin-right:.14em!important}
+.metro-route{margin:60px 0 0!important;min-height:0!important;position:relative}
+.metro-route .route-line{display:none!important}
+.metro-route .route-stages{padding:0!important;display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:clamp(15px,2.2vw,36px)!important;position:relative}
+.metro-route .route-stage,.metro-route .route-stage.stage-three,.metro-route .route-stage.stage-four{position:relative;padding:88px 0 0!important;min-width:0;border:0!important}
+.metro-route .route-stage:before{content:"";position:absolute;left:0;right:calc(-1 * clamp(15px,2.2vw,36px));top:39px;width:auto;height:12px;border-radius:0;background:#ff2929!important}
+.metro-route .route-stage:last-child:before{right:0}
+.metro-route .route-stage:after{content:"";position:absolute;left:14px;top:30px;width:30px;height:30px;background:#111;border-radius:50%}
+.metro-route .station-label,.metro-route .stage-one .station-label,.metro-route .stage-two .station-label,.metro-route .stage-three .station-label,.metro-route .stage-four .station-label{position:absolute!important;top:0!important;left:0!important;transform:none!important;display:block;font-size:clamp(13px,1.1vw,17px)!important;white-space:nowrap}
+.metro-route .route-stage h3{font-size:clamp(29px,3.1vw,52px)!important;line-height:1.08;margin:0 0 20px!important}
+.metro-route .route-stage h4{font-size:clamp(16px,1.4vw,22px)!important;line-height:1.3;min-height:58px;margin:0 0 18px!important}
+.metro-route .route-stage p{font-size:clamp(14px,1.05vw,17px)!important;line-height:1.5;max-width:260px}
+.cta{overflow:hidden;padding-bottom:95px!important}
+.cta h2{font-size:clamp(55px,8.4vw,132px)!important;line-height:1!important;letter-spacing:-.045em!important;max-width:900px;margin:45px 0 60px!important}
+.metro-arrow{top:80px!important;right:7%!important;width:clamp(70px,10vw,145px)!important}
+.journey-sign{transform:rotate(-10deg)!important;transform-origin:center!important;position:relative;display:flex!important;width:min(530px,65%)!important;min-height:165px;max-width:100%;margin:35px auto 85px!important;padding:30px 38px!important;border-radius:28px!important;font-size:clamp(24px,3.1vw,46px)!important;line-height:1.1!important}
+.journey-sign:hover{transform:rotate(-7deg) scale(1.02)!important}
+.journey-sign svg{width:clamp(40px,5vw,75px)!important}
+@media(max-width:800px){
+ .metro-beliefs p{font-size:clamp(29px,5.7vw,47px)!important;line-height:1.26!important}
+ .metro-route .route-stages{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:45px 22px!important}
+ .metro-route .route-stage,.metro-route .route-stage.stage-three,.metro-route .route-stage.stage-four{padding-top:75px!important}
+ .metro-route .route-stage:before{top:34px;height:9px;right:-22px}
+ .metro-route .route-stage:nth-child(2):before,.metro-route .route-stage:last-child:before{right:0}
+ .metro-route .route-stage:after{top:25px;left:10px;width:27px;height:27px}
+ .metro-route .route-stage h4{min-height:0}
+ .cta h2{font-size:clamp(47px,9vw,78px)!important;max-width:85%}
+ .journey-sign{width:min(480px,78%)!important;min-height:130px;margin:45px auto 80px!important;padding:24px 28px!important;font-size:clamp(23px,4vw,34px)!important}
+ .metro-arrow{width:70px!important;top:70px!important}
+}
+@media(max-width:480px){
+ .metro-beliefs p{font-size:clamp(28px,7.3vw,37px)!important}
+ .metro-route .route-stages{grid-template-columns:1fr!important;gap:28px!important}
+ .metro-route .route-stage:before{right:0!important}
+ .metro-route .route-stage h3{font-size:36px!important}
+ .metro-route .route-stage h4{font-size:18px!important}
+ .metro-route .route-stage p{max-width:100%}
+ .cta h2{font-size:clamp(43px,11vw,62px)!important;max-width:100%;margin-bottom:35px!important}
+ .metro-arrow{position:relative!important;top:auto!important;right:auto!important;width:64px!important;margin:25px 0 0 auto}
+ .journey-sign{width:85%!important;min-height:120px;margin:50px auto 70px!important;transform:rotate(-7deg)!important;padding:20px 24px!important;border-radius:20px!important;font-size:clamp(23px,6vw,31px)!important}
+ .journey-sign:hover{transform:rotate(-5deg)!important}
+}
 </style></head><body>
 <nav><a class="wordmark" href="./">Metro Design Studio</a><a class="back" href="./">← Back to Metro</a></nav>
 <main><section class="hero wrap"><div><div class="eyebrow">01 / About Metro — Independent Branding Studio</div><h1>A creative<br>station for<br>brands.</h1></div><div class="hero-bottom"><p class="lead">Rooted in culture.<br>Built for connection.</p><p class="body">Metro is an independent creative branding studio based in Cairo, specializing in contemporary Arabic branding. We bring together cultural understanding, strategic thinking, and creative design to build distinctive brands that reflect their identity, resonate with their audiences, and belong to the world they live in.</p></div></section>
