@@ -123,4 +123,38 @@ html,body{max-width:100%;overflow-x:clip}
     const note=document.createElement('p');note.className='team-status';note.textContent='Team information is temporarily unavailable.';grid.append(note);
   });
 })();
+</script><script>
+(function(){
+ const api='https://tguzedylmdjhnyisvlpp.supabase.co/rest/v1/pages?slug=eq.about&select=title,intro,sections';
+ const key='sb_publishable_eEYCG49VVJlESrEpCBIOfg_mGXxCawb';
+ const map={
+ 'hero-title':'.hero-art-layout h1','hero-lead':'.hero-bottom .lead','hero-intro':'.hero-bottom .body',
+ 'story-title':'.section-head h2','story-one':'.section-head .section-copy p:first-child','story-two':'.section-head .section-copy p:nth-child(2)',
+ 'philosophy-title':'.statement','vision-title':'.section.rule .section-head h2',
+ 'team-intro':'#metro-team'
+ };
+ fetch(api,{headers:{apikey:key}}).then(r=>{if(!r.ok)throw Error('Pages '+r.status);return r.json()}).then(rows=>{
+  const page=rows[0];if(!page)return;
+  const blocks=Array.isArray(page.sections)?page.sections:[];
+  const selectors={
+   'hero-title':'.hero-art-layout h1',
+   'hero-lead':'.hero-bottom .lead',
+   'hero-intro':'.hero-bottom .body',
+   'story-title':'.section-head h2',
+   'story-one':'.section-head .section-copy p:first-child',
+   'story-two':'.section-head .section-copy p:nth-child(2)',
+   'philosophy-title':'.statement',
+   'vision-title':'.section.rule .section-head h2',
+   'team-intro':'.people + .unused',
+   'cta-title':'.cta h2'
+  };
+  for(const block of blocks){
+   if(!block||typeof block.content!=='string'||!block.content.trim())continue;
+   const selector=selectors[block.type];
+   const node=selector&&document.querySelector(selector);
+   if(node){node.textContent=block.content;node.style.whiteSpace='pre-line'}
+   if(block.type==='team-intro'){const intro=document.querySelector('#metro-team');const prev=intro&&intro.previousElementSibling;if(prev&&prev.classList.contains('body'))prev.textContent=block.content}
+  }
+ }).catch(e=>console.warn('About CMS unavailable; using published page copy.',e));
+})();
 </script></body></html>
