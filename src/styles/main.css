@@ -77,3 +77,6 @@
 /* Match Contact headline to About Metro's 'A creative station for brands' typography. */
 .contact-overlay .contact-content h1{font-size:clamp(68px,8.5vw,150px);font-weight:500;line-height:.98;letter-spacing:normal;margin:5vh 0 30px}
 @media(max-width:650px){.contact-overlay .contact-content h1{font-size:clamp(48px,11vw,82px);line-height:1.02}}
+
+/* Shared Back to Metro button dimensions across pages */
+#close,#contactClose{display:inline-flex;align-items:center;justify-content:center;box-sizing:border-box;min-height:50px;padding:12px 20px;font-family:'Aeonik Pro',Aeonik,Arial,sans-serif;font-size:16px;font-weight:500;line-height:24px;letter-spacing:normal;white-space:nowrap;border:1px solid #111;border-radius:999px;color:#111;cursor:pointer}
